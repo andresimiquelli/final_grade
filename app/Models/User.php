@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
+        'status'
     ];
 
     /**
@@ -41,4 +43,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getValidationRules()
+    {
+        return [
+            'name' => ['string','max:191','required'],
+            'email' => ['string','max:191','required'],
+            'password' => ['string','max:191','required'],
+            'type' => ['integer','max:255','required'],
+            'status' => ['integer','max:255','required']
+        ];
+    }
+
+    public function teachers()
+    {
+        return $this->hasMany(Teacher::class,'user_id','id');
+    }
 }
