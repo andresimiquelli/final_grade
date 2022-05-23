@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Course\CourseGetService;
+use App\Services\Course\CoursePostService;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -12,9 +13,14 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
         $courseGetService = new CourseGetService();
+
+        if($request->hash('filters'))
+            return $courseGetService->search($request->get('filters'));
+        
         return $courseGetService->findAll();
     }
 
@@ -26,7 +32,10 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $coursePostService = new CoursePostService();
+        $result = $coursePostService->create($request->json()->all());
+
+        return response()->json($result);
     }
 
     /**
