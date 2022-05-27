@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Course\CourseDeleteService;
 use App\Services\Course\CourseGetService;
 use App\Services\Course\CoursePostService;
+use App\Services\Course\CoursePutService;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -11,17 +13,19 @@ class CourseController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-
         $courseGetService = new CourseGetService();
 
-        if($request->hash('filters'))
-            return $courseGetService->search($request->get('filters'));
+        if($request->has('filters'))
+            $result = $courseGetService->search($request->get('filters'));
+        else
+            $result = $courseGetService->findAll();
         
-        return $courseGetService->findAll();
+       return response()->json($result);
     }
 
     /**
@@ -35,7 +39,7 @@ class CourseController extends Controller
         $coursePostService = new CoursePostService();
         $result = $coursePostService->create($request->json()->all());
 
-        return response()->json($result);
+        return response()->json($result,201);
     }
 
     /**
@@ -46,7 +50,10 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        //
+        $courseGetService = new CourseGetService();
+        $result = $courseGetService->find($id);
+
+        return response()->json($result);
     }
 
     /**
@@ -58,7 +65,10 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $coursePutService = new CoursePutService();
+        $result = $coursePutService->update($id, $request->json()->all());
+
+        return response()->json($result);
     }
 
     /**
@@ -69,6 +79,9 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $courseDeleteService = new CourseDeleteService();
+        $result = $courseDeleteService->delete($id);
+        
+        return response()->json($result);
     }
 }

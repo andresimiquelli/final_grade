@@ -3,25 +3,13 @@
 namespace App\Services\Course;
 
 use App\Models\Course;
-use App\Utils\FilteringUtil;
+use App\Services\GetService;
 
-class CourseGetService 
+class CourseGetService extends GetService
 {
-
-    private $searchable = [
+    protected $model = Course::class;
+    protected $searchable = [
         'name',
         'level'
     ];
-
-    public function findAll()
-    {
-        return Course::paginate();
-    }
-
-    public function search($filters = "")
-    {
-        $filtering = new FilteringUtil(new Course(), $this->searchable);
-        $queryBuilder = $filtering->resolveQuery($filters);
-        return $queryBuilder->paginate();
-    }
 }

@@ -3,9 +3,9 @@
 namespace App\Services\Course;
 
 use App\Models\Course;
-use App\Services\PostService;
+use App\Services\PutService;
 
-class CoursePostService extends PostService
+class CoursePutService extends PutService
 {
     protected $model = Course::class;
 }

@@ -6,6 +6,7 @@ class Error
 {
     public static $VALIDATION_ERROR = 1;
     public static $SERVICE_ERROR = 2;
+    public static $DATABASE_ERROR = 3;
     
     private $type;
     private $message;

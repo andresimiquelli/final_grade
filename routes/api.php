@@ -13,5 +13,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () use ($resourceExcept) {
 
-    Route::resource('courses',CourseController::class,['except' => $resourceExcept]);
+    Route::apiResource('courses',CourseController::class,['except' => $resourceExcept]);
 });

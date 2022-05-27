@@ -3,9 +3,9 @@
 namespace App\Services\Course;
 
 use App\Models\Course;
-use App\Services\PostService;
+use App\Services\DeleteService;
 
-class CoursePostService extends PostService
+class CourseDeleteService extends DeleteService
 {
     protected $model = Course::class;
 }
