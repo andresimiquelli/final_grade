@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Course\CourseDeleteService;
-use App\Services\Course\CourseGetService;
-use App\Services\Course\CoursePostService;
-use App\Services\Course\CoursePutService;
+use App\Services\Pack\PackDeleteService;
+use App\Services\Pack\PackGetService;
+use App\Services\Pack\PackPostService;
+use App\Services\Pack\PackPutService;
 use Illuminate\Http\Request;
 
-class CourseController extends Controller
+class PackController extends Controller
 {
-
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @param \Illuminate\Http\Request
@@ -19,7 +18,7 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-        $service = new CourseGetService();
+        $service = new PackGetService();
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
         else
@@ -36,7 +35,7 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $service = new CoursePostService();
+        $service = new PackPostService();
         $result = $service->create($request->json()->all());
 
         return response()->json($result,201);
@@ -50,7 +49,7 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $service = new CourseGetService();
+        $service = new PackGetService();
         $result = $service->find($id);
 
         return response()->json($result);
@@ -65,7 +64,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $service = new CoursePutService();
+        $service = new PackPutService();
         $result = $service->update($id, $request->json()->all());
 
         return response()->json($result);
@@ -79,7 +78,7 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        $service = new CourseDeleteService();
+        $service = new PackDeleteService();
         $result = $service->delete($id);
         
         return response()->json($result);

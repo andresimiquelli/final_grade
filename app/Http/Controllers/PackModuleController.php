@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Course\CourseDeleteService;
-use App\Services\Course\CourseGetService;
-use App\Services\Course\CoursePostService;
-use App\Services\Course\CoursePutService;
+use App\Services\Pack\Module\PackModuleDeleteService;
+use App\Services\Pack\Module\PackModuleGetService;
+use App\Services\Pack\Module\PackModulePostService;
+use App\Services\Pack\Module\PackModulePutService;
 use Illuminate\Http\Request;
 
-class CourseController extends Controller
+class PackModuleController extends Controller
 {
 
      /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request
+     * @param \Illuminate\Http\Request $request
+     * @param int $pack
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $pack_id)
     {
-        $service = new CourseGetService();
+        $service = new PackModuleGetService(['pack_id' => $pack_id]);
+
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
         else
@@ -34,9 +36,9 @@ class CourseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $pack_id)
     {
-        $service = new CoursePostService();
+        $service = new PackModulePostService(['pack_id' => $pack_id]);
         $result = $service->create($request->json()->all());
 
         return response()->json($result,201);
@@ -46,11 +48,12 @@ class CourseController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
+     * @param  int  $pack_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $pack_id)
     {
-        $service = new CourseGetService();
+        $service = new PackModuleGetService(['pack_id' => $pack_id]);
         $result = $service->find($id);
 
         return response()->json($result);
@@ -60,12 +63,13 @@ class CourseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $pack_id
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $pack_id, $id)
     {
-        $service = new CoursePutService();
+        $service = new PackModulePutService(['pack_id' => $pack_id]);
         $result = $service->update($id, $request->json()->all());
 
         return response()->json($result);
@@ -74,12 +78,13 @@ class CourseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  int $pack_id
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($pack_id, $id)
     {
-        $service = new CourseDeleteService();
+        $service = new PackModuleDeleteService(['pack_id' => $pack_id]);
         $result = $service->delete($id);
         
         return response()->json($result);
