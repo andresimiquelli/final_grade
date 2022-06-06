@@ -11,6 +11,7 @@ use App\Http\Controllers\PackController;
 use App\Http\Controllers\PackModuleController;
 use App\Http\Controllers\PackModuleSubjectController;
 use App\Http\Controllers\StudetController;
+use App\Http\Controllers\TeacherController;
 
 $resourceExcept = ['create','edit'];
 
@@ -27,4 +28,5 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     Route::apiResource('students',StudetController::class, ['except' => $resourceExcept]);
     Route::apiResource('classes',CClassController::class, ['except' => $resourceExcept]);
     Route::apiResource('enrollments',EnrollmentController::class, ['except' => $resourceExcept]);
+    Route::apiResource('teachers',TeacherController::class, ['except' => $resourceExcept]);
 });
