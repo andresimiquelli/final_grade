@@ -18,8 +18,8 @@ class CreateEnrollmentsTable extends Migration
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('class_id');
             $table->timestamp('start_at');
-            $table->timestamp('end_at');
-            $table->unsignedTinyInteger('status');
+            $table->timestamp('end_at')->nullable();
+            $table->unsignedTinyInteger('status')->default(1);
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students');
