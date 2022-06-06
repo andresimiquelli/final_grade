@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CClassController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,5 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     Route::apiResource('packs.modules',PackModuleController::class,['except' => $resourceExcept]);
     Route::apiResource('packs.modules.subjects',PackModuleSubjectController::class,['except' => $resourceExcept]);
     Route::apiResource('students',StudetController::class, ['except' => $resourceExcept]);
+    Route::apiResource('classes',CClassController::class, ['except' => $resourceExcept]);
 });
