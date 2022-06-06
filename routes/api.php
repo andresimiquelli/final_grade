@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\PackController;
 use App\Http\Controllers\PackModuleController;
+use App\Http\Controllers\PackModuleSubjectController;
 
 $resourceExcept = ['create','edit'];
 
@@ -19,5 +20,5 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     Route::apiResource('subjects',SubjectController::class,['except' => $resourceExcept]);
     Route::apiResource('packs',PackController::class,['except' => $resourceExcept]);
     Route::apiResource('packs.modules',PackModuleController::class,['except' => $resourceExcept]);
-    Route::apiResource('packs.modules.subjects',SubjectController::class,['except' => $resourceExcept]);
+    Route::apiResource('packs.modules.subjects',PackModuleSubjectController::class,['except' => $resourceExcept]);
 });

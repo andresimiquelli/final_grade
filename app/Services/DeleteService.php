@@ -21,7 +21,7 @@ abstract class DeleteService
         $exists = $this->model->find($id);
 
         if(!$exists)
-            throw new ResourceNotFoundException($this->model->get_class());
+            throw new ResourceNotFoundException(get_class($this->model->make()));
 
         $exists->delete();
         return $exists;
