@@ -12,6 +12,7 @@ use App\Http\Controllers\PackModuleController;
 use App\Http\Controllers\PackModuleSubjectController;
 use App\Http\Controllers\StudetController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\UserController;
 
 $resourceExcept = ['create','edit'];
 
@@ -20,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () use ($resourceExcept) {
+    Route::apiResource('users',UserController::class,['except' => $resourceExcept]);
     Route::apiResource('courses',CourseController::class,['except' => $resourceExcept]);
     Route::apiResource('subjects',SubjectController::class,['except' => $resourceExcept]);
     Route::apiResource('packs',PackController::class,['except' => $resourceExcept]);
