@@ -19,7 +19,7 @@ class CreateTeacherAssignmentsTable extends Migration
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('subject_id');
             $table->timestamp('start_at');
-            $table->timestamp('end_at');
+            $table->timestamp('end_at')->nullable();
             $table->timestamps();
 
             $table->foreign('teacher_id')->references('id')->on('teachers');
