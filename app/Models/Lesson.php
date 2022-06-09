@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lessons extends Model
+class Lesson extends Model
 {
     use HasFactory;
 
@@ -29,7 +29,7 @@ class Lessons extends Model
         return $this->belongsTo(CClass::class,'class_id','id');
     }
 
-    public function packModuleSubject()
+    public function pack_module_subject()
     {
         return $this->belongsTo(PackModuleSubject::class,'pack_module_subject_id','id');
     }

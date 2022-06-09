@@ -28,7 +28,7 @@ abstract class PutService
             $exists = $this->model->find($id);
 
             if(!$exists)
-                throw new ResourceNotFoundException(get_class($this->model));
+                throw new ResourceNotFoundException(get_class($this->model->make()));
 
             $exists->fill($data);
             $exists->save();
