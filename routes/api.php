@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\EnrollmentAbsenceController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\SubjectController;
@@ -35,4 +36,5 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     Route::apiResource('teachers',TeacherController::class, ['except' => $resourceExcept]);
     Route::apiResource('teachers.assignments',TeacherAssignmentController::class, ['except' => $resourceExcept]);
     Route::apiResource('classes.subjects.lessons',LessonController::class, ['except' => $resourceExcept]);
+    Route::apiResource('enrollments.absences', EnrollmentAbsenceController::class, ['except' => [...$resourceExcept, 'update']]);
 });

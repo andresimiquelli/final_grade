@@ -9,6 +9,8 @@ abstract class PostService
 {
     protected $model;
     protected $nesteds = [];
+    protected $unique_fields = [];
+    protected $update_if_exists = true;
 
     public function __construct(array $nesteds = [])
     {
@@ -25,7 +27,23 @@ abstract class PostService
 
         if($validated)
         {
+            if(count($this->unique_fields) > 0)
+            {
+                $exists = $this->exists($data);
+                if($exists)
+                {
+                    if($this->update_if_exists)
+                    {
+                        $exists->fill($data);
+                        $exists->save(); 
+                    }
+                    
+                    return $exists;
+                }
+            }
+
             $course = $this->model->create($data);
+
             return $course;
         }
         else
@@ -42,5 +60,25 @@ abstract class PostService
         }
 
         return $data;
+    }
+
+    private function exists($data)
+    {
+        if(count($this->unique_fields) > 0)
+        {
+            $model = $this->model->make();
+            foreach($this->unique_fields as $field)
+            {
+                if(key_exists($field, $data))
+                    $model = $model->where($field, $data[$field]);
+            }
+            
+            $exists = $model->first();
+
+            if($exists)
+                return $exists;
+        }
+
+        return false;
     }
 }
