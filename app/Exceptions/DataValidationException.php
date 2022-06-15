@@ -18,7 +18,7 @@ class DataValidationException extends Exception
 
     public function render()
     {
-        $error = new Error(Error::$VALIDATION_ERROR, "Invalid data was sended.",$this->errors, $this->data);
+        $error = new Error(Error::$VALIDATION_ERROR, "Validation errors.",$this->errors, $this->data);
         return response()->json($error->toArray(),400);
     }
 }

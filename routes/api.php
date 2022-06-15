@@ -9,6 +9,7 @@ use App\Http\Controllers\EnrollmentAbsenceController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\EvaluationGradeController;
+use App\Http\Controllers\FinalgradeController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\PackController;
@@ -41,4 +42,5 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     Route::apiResource('classes.subjects.evaluations',EvaluationController::class, ['except' => $resourceExcept]);
     Route::apiResource('classes.subjects.evaluations.grades',EvaluationGradeController::class, ['except' => [...$resourceExcept, 'update']]);
     Route::apiResource('enrollments.absences', EnrollmentAbsenceController::class, ['except' => [...$resourceExcept, 'update']]);
+    Route::apiResource('finalgrades', FinalgradeController::class, ['except' => [...$resourceExcept, 'update']]);
 });
