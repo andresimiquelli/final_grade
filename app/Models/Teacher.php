@@ -16,7 +16,7 @@ class Teacher extends Model
     public function getValidationRules()
     {
         return [
-            'user_id' => ['integer','required','exists:users,id']
+            'user_id' => ['integer','required','exists:users,id','unique:teachers,user_id']
         ];
     }
 

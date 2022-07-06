@@ -11,11 +11,17 @@ abstract class PostService
     protected $nesteds = [];
     protected $unique_fields = [];
     protected $update_if_exists = true;
+    protected $relationships = [];
 
     public function __construct(array $nesteds = [])
     {
         $this->model = new $this->model();
         $this->nesteds = $nesteds;
+    }
+
+    public function setRelationships(array $relationships)
+    {
+        $this->relationships = $relationships;
     }
 
     public function create($data)
@@ -42,9 +48,14 @@ abstract class PostService
                 }
             }
 
-            $course = $this->model->create($data);
+            $result = $this->model->create($data);
 
-            return $course;
+            foreach($this->relationships as $rel)
+            {
+                $result->$rel;
+            }
+
+            return $result;
         }
         else
         {

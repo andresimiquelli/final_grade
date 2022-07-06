@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
+
+    private $defaultRelationships = ['user'];
+
     /**
      * Display a listing of the resource.
      *
@@ -19,6 +22,7 @@ class TeacherController extends Controller
     public function index(Request $request)
     {
         $service = new TeacherGetService();
+        $service->setRelationships($this->defaultRelationships);
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
         else
@@ -36,6 +40,7 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $service = new TeacherPostService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->create($request->json()->all());
 
         return response()->json($result,201);
@@ -50,6 +55,7 @@ class TeacherController extends Controller
     public function show($id)
     {
         $service = new TeacherGetService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->find($id);
 
         return response()->json($result);
