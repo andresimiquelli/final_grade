@@ -10,11 +10,16 @@ abstract class PutService
 
     protected $model;
     protected $nesteds;
+    protected $relationships = [];
 
     public function __construct(array $nesteds = [])
     {
         $this->model = new $this->model();
         $this->nesteds = $nesteds;
+    }
+
+    public function setRelationships(array $relationships) {
+        $this->relationships = $relationships;
     }
 
     public function update($id, $data)
@@ -32,6 +37,10 @@ abstract class PutService
 
             $exists->fill($data);
             $exists->save();
+
+            foreach($this->relationships as $rel) {
+                $exists->$rel;
+            }
 
             return $exists;
         }

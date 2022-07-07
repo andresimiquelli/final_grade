@@ -71,6 +71,7 @@ class TeacherController extends Controller
     public function update(Request $request, $id)
     {
         $service = new TeacherPutService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->update($id, $request->json()->all());
 
         return response()->json($result);
