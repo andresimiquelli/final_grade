@@ -8,4 +8,5 @@ use App\Services\GetService;
 class PackModuleSubjectGetService extends GetService
 {
     protected $model = PackModuleSubject::class;
+    protected $with_fields = ['subject'];
 }

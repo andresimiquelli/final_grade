@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class PackModuleSubjectController extends Controller
 {
+
+    private $defaultRelationships = ['subject'];
+
     /**
      * Display a listing of the resource.
      *
@@ -18,6 +21,7 @@ class PackModuleSubjectController extends Controller
     public function index(Request $request, $pack_id, $module_id)
     {
         $service = new PackModuleSubjectGetService(['pack_module_id' => $module_id]);
+        $service->setRelationships($this->defaultRelationships);
 
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
@@ -36,6 +40,7 @@ class PackModuleSubjectController extends Controller
     public function store(Request $request, $pack_id, $module_id)
     {
         $service = new PackModuleSubjectPostService(['pack_module_id' => $module_id]);
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->create($request->json()->all());
 
         return response()->json($result,201);
@@ -50,6 +55,7 @@ class PackModuleSubjectController extends Controller
     public function show($id, $pack_id, $module_id)
     {
         $service = new PackModuleSubjectGetService(['pack_module_id' => $module_id]);
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->find($id);
 
         return response()->json($result);
@@ -62,9 +68,10 @@ class PackModuleSubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $pack_id, $module_id)
+    public function update(Request $request, $pack_id, $module_id, $id)
     {
         $service = new PackModuleSubjectPutService(['pack_module_id' => $module_id]);
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->update($id, $request->json()->all());
 
         return response()->json($result);

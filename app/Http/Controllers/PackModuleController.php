@@ -22,6 +22,9 @@ class PackModuleController extends Controller
     {
         $service = new PackModuleGetService(['pack_id' => $pack_id]);
 
+        if($request->has('with'))
+            $service->setRelationships(explode(',',$request->get('with')));
+        
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
         else
@@ -51,9 +54,13 @@ class PackModuleController extends Controller
      * @param  int  $pack_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $pack_id)
+    public function show(Request $request, $id, $pack_id)
     {
         $service = new PackModuleGetService(['pack_id' => $pack_id]);
+
+        if($request->has('with'))
+            $service->setRelationships(explode(',',$request->get('with')));
+
         $result = $service->find($id);
 
         return response()->json($result);
