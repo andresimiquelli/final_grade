@@ -10,8 +10,9 @@ abstract class GetService
 {
 
     protected $model;
-    protected $searchable;
+    protected $searchable = [];
     protected $with_fields = [];
+    protected $builder;
 
     private $nesteds = [];
     private $relationships = [];
@@ -19,6 +20,7 @@ abstract class GetService
     public function __construct(array $nesteds = [])
     {
         $this->model = new $this->model();
+        $this->builder = $this->model->query();
         $this->nesteds = $nesteds;
     }
 
@@ -32,16 +34,16 @@ abstract class GetService
         $this->resolveRelationships();
         $this->resolveNesteds();
 
-        return $this->model->paginate();
+        return $this->builder->paginate();
     }
 
     public function search($filters = "")
     {
         $this->resolveRelationships();
         $this->resolveNesteds();
-        $filtering = new FilteringUtil(new $this->model(), $this->searchable);
-        $this->model = $filtering->resolveQuery($filters);
-        return $this->model->paginate();
+        $filtering = new FilteringUtil($this->builder, $this->searchable);
+        $this->builder = $filtering->resolveQuery($filters);
+        return $this->builder->paginate();
     }
 
     public function find($id)
@@ -60,7 +62,7 @@ abstract class GetService
     {
         foreach($this->nesteds as $field => $value)
         {
-            $this->model = $this->model->where($field, $value); 
+            $this->builder = $this->builder->where($field, $value); 
         }
     }
 
@@ -75,7 +77,7 @@ abstract class GetService
             if(strlen($ffield) > 0) 
             {
                 if(array_search($ffield, $forsearch, true) > 0)
-                    $this->model = $this->model->with(trim($field));
+                    $this->builder = $this->builder->with(trim($field));
                 else
                     throw new RelationshipException($field);
             }

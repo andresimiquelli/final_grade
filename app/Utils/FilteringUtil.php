@@ -6,25 +6,18 @@ use Exception;
 
 class FilteringUtil
 {
-    private $model;
-    private $searchable;
+    private $builder;
+    private $searchable = array();
 
-    public function __construct($modelClass, $searchable = [])
+    public function __construct($builder, $searchable = [])
     {
         $this->searchable = $searchable;
-
-        try
-        {
-            $this->model = new $modelClass();
-        }
-        catch(Exception $e)
-        {
-            throw $e;
-        }
+        $this->builder = $builder;
     }
 
     public function resolveQuery($filters)
     {
+        
         $params = $this->unfold($filters);
         $params = $this->clearQuery($params);
         return $this->build($params);
@@ -78,7 +71,7 @@ class FilteringUtil
 
     private function build($params)
     {
-        $builder = $this->model;
+        $builder = $this->builder;
 
         foreach($params as $field => $values)
         {

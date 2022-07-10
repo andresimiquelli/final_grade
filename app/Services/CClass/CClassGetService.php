@@ -14,4 +14,6 @@ class CClassGetService extends GetService
         'end_at',
         'status'
     ];
+
+    protected $with_fields =['pack'];
 }

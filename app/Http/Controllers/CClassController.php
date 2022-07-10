@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class CClassController extends Controller
 {
+
+    private $defaultRelationships = ['pack'];
+
      /**
      * Display a listing of the resource.
      *
@@ -19,6 +22,7 @@ class CClassController extends Controller
     public function index(Request $request)
     {
         $service = new CClassGetService();
+        $service->setRelationships($this->defaultRelationships);
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
         else
@@ -36,6 +40,7 @@ class CClassController extends Controller
     public function store(Request $request)
     {
         $service = new CClassPostService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->create($request->json()->all());
 
         return response()->json($result,201);
@@ -50,6 +55,7 @@ class CClassController extends Controller
     public function show($id)
     {
         $service = new CClassGetService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->find($id);
 
         return response()->json($result);
@@ -65,6 +71,7 @@ class CClassController extends Controller
     public function update(Request $request, $id)
     {
         $service = new CClassPutService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->update($id, $request->json()->all());
 
         return response()->json($result);
