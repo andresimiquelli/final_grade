@@ -7,7 +7,9 @@ use App\Exceptions\ResourceNotFoundException;
 abstract class DeleteService
 {
     protected $model;
-    protected $nesteds;
+    protected $nesteds = [];
+    protected $dispatchBeforeDelete;
+
 
     public function __construct(array $nesteds = [])
     {
@@ -34,5 +36,10 @@ abstract class DeleteService
             $this->model = $this->model->where($field, $value); 
         }
         
+    }
+
+    private function dispatchEvent($eventClass, $user) {
+        if(!is_null($eventClass))
+            $eventClass::dispatch($user);
     }
 }
