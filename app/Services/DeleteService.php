@@ -8,7 +8,8 @@ abstract class DeleteService
 {
     protected $model;
     protected $nesteds = [];
-    protected $dispatchBeforeDelete;
+    protected $triggerBeforeDelete = [];
+    protected $triggerAfterDelete = [];
 
 
     public function __construct(array $nesteds = [])
@@ -25,8 +26,20 @@ abstract class DeleteService
         if(!$exists)
             throw new ResourceNotFoundException(get_class($this->model->make()));
 
-        $exists->delete();
-        return $exists;
+        return $this->executeDeletion($exists);
+    }
+
+    public function deleteBy($field, $value) 
+    {
+        $deleted = array();
+        $result = $this->model->where($field, $value)->get();
+        
+        foreach($result as $row)
+        {
+            $deleted = $this->executeDeletion($row);
+        }
+
+        return $deleted;
     }
 
     private function resolveNesteds()
@@ -38,8 +51,20 @@ abstract class DeleteService
         
     }
 
-    private function dispatchEvent($eventClass, $user) {
-        if(!is_null($eventClass))
-            $eventClass::dispatch($user);
+    private function trigger(array $triggers, $obj = null) {
+        foreach($triggers as $trigger)
+        {
+            $obj = $this->$trigger($obj);
+        }
+
+        return $obj;
+    }
+
+    private function executeDeletion($entity)
+    {
+        $entity = $this->trigger($this->triggerBeforeDelete, $entity);
+        $entity->delete();
+        $entity = $this->trigger($this->triggerAfterDelete, $entity);
+        return $entity;
     }
 }
