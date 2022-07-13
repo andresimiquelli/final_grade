@@ -18,9 +18,13 @@ class PackModuleSubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $pack_id, $module_id)
+    public function index(Request $request, $pack_id, $module_id = null)
     {
-        $service = new PackModuleSubjectGetService(['pack_module_id' => $module_id]);
+        if(is_null($module_id))
+            $service = new PackModuleSubjectGetService(['pack_id' => $pack_id]);
+        else
+            $service = new PackModuleSubjectGetService(['pack_module_id' => $module_id]);
+
         $service->setRelationships($this->defaultRelationships);
 
         if($request->has('filters'))

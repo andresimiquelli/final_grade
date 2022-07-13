@@ -31,7 +31,7 @@ class PackModule extends Model
         return $this->belongsTo(Pack::class,'pack_id','id');
     }
 
-    public function packModuleSubjects()
+    public function subjects()
     {
         return $this->hasMany(PackModuleSubject::class,'pack_module_id','id');
     }

@@ -15,5 +15,5 @@ class CClassGetService extends GetService
         'status'
     ];
 
-    protected $with_fields =['pack'];
+    protected $with_fields =['pack','pack.course'];
 }

@@ -9,7 +9,5 @@ class PackGetService extends GetService
 {
     protected $model = Pack::class;
 
-    protected $with_fields = [
-        'course'
-    ];
+    protected $with_fields = ['course'];
 }

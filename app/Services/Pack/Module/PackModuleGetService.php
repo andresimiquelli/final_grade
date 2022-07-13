@@ -8,5 +8,5 @@ use App\Services\GetService;
 class PackModuleGetService extends GetService
 {
     protected $model = PackModule::class;
-    protected $with_fields = ['pack'];
+    protected $with_fields = ['pack','subjects','subjects.subject'];
 }

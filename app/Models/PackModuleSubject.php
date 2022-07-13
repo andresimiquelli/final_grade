@@ -10,6 +10,7 @@ class PackModuleSubject extends Model
     use HasFactory;
 
     protected $fillable = [
+        'pack_id',
         'pack_module_id',
         'subject_id',
         'load',
@@ -19,6 +20,7 @@ class PackModuleSubject extends Model
     public function getValidationRules()
     {
         return [
+            'pack_id' => ['integer','required','exists:packs,id'],
             'pack_module_id' => ['integer','required','exists:pack_modules,id'],
             'subject_id' => ['integer','required','exists:subjects,id'],
             'load' => ['integer','max:65535', 'min:0'],
@@ -26,9 +28,9 @@ class PackModuleSubject extends Model
         ];
     }
 
-    public function pack()
+    public function module()
     {
-        return $this->belongsTo(Pack::class,'pack_module_id','id');
+        return $this->belongsTo(PackModule::class,'pack_module_id','id');
     }
 
     public function subject()

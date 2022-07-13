@@ -22,7 +22,12 @@ class CClassController extends Controller
     public function index(Request $request)
     {
         $service = new CClassGetService();
-        $service->setRelationships($this->defaultRelationships);
+
+        if($request->has('with'))
+            $service->setRelationships(explode(',',$request->get('with')));
+        else
+            $service->setRelationships($this->defaultRelationships);
+
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
         else
@@ -52,10 +57,15 @@ class CClassController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $service = new CClassGetService();
-        $service->setRelationships($this->defaultRelationships);
+        
+        if($request->has('with'))
+            $service->setRelationships(explode(',',$request->get('with')));
+        else
+            $service->setRelationships($this->defaultRelationships);
+
         $result = $service->find($id);
 
         return response()->json($result);
