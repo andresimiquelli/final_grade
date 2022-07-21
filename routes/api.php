@@ -44,8 +44,6 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
 
     Route::apiResource('enrollments',EnrollmentController::class, ['except' => $resourceExcept]);
     Route::apiResource('enrollments.absences', EnrollmentAbsenceController::class, ['except' => [...$resourceExcept, 'update']]);
-
-    Route::apiResource('teachers',TeacherController::class, ['except' => $resourceExcept]);
     
     Route::apiResource('classes.subjects.lessons',LessonController::class, ['except' => $resourceExcept]);
     Route::apiResource('classes.subjects.evaluations',EvaluationController::class, ['except' => $resourceExcept]);
