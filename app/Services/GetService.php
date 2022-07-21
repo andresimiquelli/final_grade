@@ -50,7 +50,7 @@ abstract class GetService
     {
         $this->resolveRelationships();
 
-        $record = $this->model->find($id);
+        $record = $this->builder->find($id);
 
         if(!$record)
             throw new ResourceNotFoundException(get_class($this->model));

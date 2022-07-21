@@ -17,11 +17,13 @@ class CreateLessonsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('pack_module_subject_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamp('reference');
             $table->timestamps();
 
             $table->foreign('class_id')->references('id')->on('classes');
             $table->foreign('pack_module_subject_id')->references('id')->on('pack_module_subjects');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -35,6 +37,7 @@ class CreateLessonsTable extends Migration
         Schema::table('lessons', function(Blueprint $table) {
             $table->dropIndex('lessons_class_id_foreign');
             $table->dropIndex('lessons_pack_module_subject_id_foreign');
+            $table->dropIndex('lessons_user_id_foreign');
         });
 
         Schema::dropIfExists('lessons');

@@ -8,11 +8,7 @@ use App\Services\GetService;
 class TeacherGetService extends GetService
 {
     protected $model = Teacher::class;
-    protected $searchable = [
-        'user_id'
-    ];
+    protected $searchable = ['user_id'];
 
-    protected $with_fields = [
-        'user'
-    ];
+    protected $with_fields = ['user'];
 }

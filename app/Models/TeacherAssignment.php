@@ -33,7 +33,7 @@ class TeacherAssignment extends Model
         return $this->belongsTo(Teacher::class,'teacher_id','id');
     }
 
-    public function class()
+    public function cclass()
     {
         return $this->belongsTo(CClass::class,'class_id','id');
     }

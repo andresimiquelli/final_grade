@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class TeacherAssignmentController extends Controller
 {
+
+    private $defaultRelationships = ['cclass','subject'];
+
     /**
      * Display a listing of the resource.
      *
@@ -23,6 +26,8 @@ class TeacherAssignmentController extends Controller
 
         if($request->has('with'))
             $service->setRelationships(explode(',',$request->get('with')));
+        else
+            $service->setRelationships($this->defaultRelationships);
 
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
@@ -41,6 +46,7 @@ class TeacherAssignmentController extends Controller
     public function store(Request $request, $teacher_id)
     {
         $service = new TeacherAssignmentPostService(['teacher_id' => $teacher_id]);
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->create($request->json()->all());
 
         return response()->json($result,201);
@@ -59,6 +65,8 @@ class TeacherAssignmentController extends Controller
 
         if($request->has('with'))
             $service->setRelationships(explode(',',$request->get('with')));
+        else
+            $service->setRelationships($this->defaultRelationships);
 
         $result = $service->find($id);
 
@@ -76,6 +84,7 @@ class TeacherAssignmentController extends Controller
     public function update(Request $request, $teacher_id, $id)
     {
         $service = new TeacherAssignmentPutService(['teacher_id' => $teacher_id]);
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->update($id, $request->json()->all());
 
         return response()->json($result);

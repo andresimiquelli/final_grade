@@ -12,6 +12,7 @@ class Lesson extends Model
     protected $fillable = [
         'class_id',
         'pack_module_subject_id',
+        'user_id',
         'reference'
     ];
 
@@ -20,6 +21,7 @@ class Lesson extends Model
         return [
             'class_id' => ['integer','required','exists:classes,id'],
             'pack_module_subject_id' => ['integer','required','exists:pack_module_subjects,id'],
+            'user_id' => ['integer','required','exists:users,id'],
             'reference' => ['date']
         ];
     }
@@ -37,6 +39,11 @@ class Lesson extends Model
     public function absences()
     {
         return $this->hasMany(EnrollmentAbsence::class,'lesson_id','id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
 }
