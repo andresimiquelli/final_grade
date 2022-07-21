@@ -33,7 +33,7 @@ class Enrollment extends Model
         return $this->belongsTo(Student::class,'student_id','id');
     }
 
-    public function class()
+    public function cclass()
     {
         return $this->belongsTo(CClass::class,'class_id','id');
     }

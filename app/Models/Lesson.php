@@ -26,7 +26,7 @@ class Lesson extends Model
         ];
     }
 
-    public function class()
+    public function cclass()
     {
         return $this->belongsTo(CClass::class,'class_id','id');
     }
