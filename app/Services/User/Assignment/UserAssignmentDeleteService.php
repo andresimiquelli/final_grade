@@ -15,19 +15,24 @@ class UserAssignmentDeleteService extends DeleteService
 
     protected function checkBeforeDelete($assignment)
     {
+        $errors = Array();
+
         $lessons = Lesson::where('user_id',$assignment->teacher->id)->get();
         if($lessons)
         {
             if(count($lessons)>0)
-                throw new DeletionException();
+                $errors = array_merge($errors, ['lessons' => count($lessons)]);
         }        
         
         $evaluations = Evaluation::where('user_id',$assignment->teacher->id)->get();
         if($evaluations)
         {
            if(count($evaluations)>0)
-            throw new DeletionException(); 
+                $errors = array_merge($errors, ['evaluations' => count($evaluations)]); 
         }
+
+        if(count($errors) > 0)
+            throw new DeletionException($errors);
         
     }
 }
