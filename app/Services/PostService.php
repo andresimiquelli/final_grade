@@ -13,6 +13,9 @@ abstract class PostService
     protected $update_if_exists = true;
     protected $relationships = [];
 
+    protected $triggerBeforeStore = [];
+    protected $triggerAfterStore = []; 
+
     public function __construct(array $nesteds = [])
     {
         $this->model = new $this->model();
@@ -48,12 +51,16 @@ abstract class PostService
                 }
             }
 
+            $data = $this->trigger($this->triggerBeforeStore, $data);
+
             $result = $this->model->create($data);
 
             foreach($this->relationships as $rel)
             {
                 $result->$rel;
             }
+
+            $result = $this->trigger($this->triggerAfterStore, $result);
 
             return $result;
         }
@@ -91,5 +98,14 @@ abstract class PostService
         }
 
         return false;
+    }
+
+    private function trigger(array $triggers, $obj = null) {
+        foreach($triggers as $trigger)
+        {
+            $obj = $this->$trigger($obj);
+        }
+
+        return $obj;
     }
 }
