@@ -12,6 +12,9 @@ abstract class PutService
     protected $nesteds;
     protected $relationships = [];
 
+    protected $triggerBeforeUpdate = [];
+    protected $triggerAfterUpdate = []; 
+
     public function __construct(array $nesteds = [])
     {
         $this->model = new $this->model();
@@ -35,8 +38,13 @@ abstract class PutService
             if(!$exists)
                 throw new ResourceNotFoundException(get_class($this->model->make()));
 
+            $old = $exists->all();
+            $data = $this->trigger($this->triggerBeforeUpdate, $data, $old);
+            
             $exists->fill($data);
             $exists->save();
+
+            $exists = $this->trigger($this->triggerAfterUpdate, $exists, $old);
 
             foreach($this->relationships as $rel) {
                 $exists->$rel;
@@ -53,5 +61,14 @@ abstract class PutService
             $this->model = $this->model->where($field, $value); 
         }
         
+    }
+
+    private function trigger(array $triggers, $obj = null, $old = null) {
+        foreach($triggers as $trigger)
+        {
+            $obj = $this->$trigger($obj, $old);
+        }
+
+        return $obj;
     }
 }
