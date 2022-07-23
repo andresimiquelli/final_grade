@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 class EnrollmentController extends Controller
 {
+
+    private $defaultRelationships = ['cclass'];
+
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +25,8 @@ class EnrollmentController extends Controller
 
         if($request->has("with"))
             $service->setRelationships(explode(",",$request->get("with")));
+        else
+            $service->setRelationships($this->defaultRelationships);
 
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
@@ -40,6 +45,7 @@ class EnrollmentController extends Controller
     public function store(Request $request)
     {
         $service = new EnrollmentPostService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->create($request->json()->all());
 
         return response()->json($result,201);
@@ -57,6 +63,8 @@ class EnrollmentController extends Controller
 
         if($request->has("with"))
             $service->setRelationships(explode(",",$request->get("with")));
+        else
+            $service->setRelationships($this->defaultRelationships);
 
         $result = $service->find($id);
 
@@ -73,6 +81,7 @@ class EnrollmentController extends Controller
     public function update(Request $request, $id)
     {
         $service = new EnrollmentPutService();
+        $service->setRelationships($this->defaultRelationships);
         $result = $service->update($id, $request->json()->all());
 
         return response()->json($result);
