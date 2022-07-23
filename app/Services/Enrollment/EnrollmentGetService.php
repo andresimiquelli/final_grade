@@ -19,6 +19,6 @@ class EnrollmentGetService extends GetService
 
     protected $with_fields = [
         'student',
-        'class'
+        'cclass'
     ];
 }
