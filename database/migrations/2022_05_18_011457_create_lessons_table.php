@@ -18,6 +18,7 @@ class CreateLessonsTable extends Migration
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('pack_module_subject_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('content',512);
             $table->timestamp('reference');
             $table->timestamps();
 

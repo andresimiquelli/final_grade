@@ -13,6 +13,7 @@ class Lesson extends Model
         'class_id',
         'pack_module_subject_id',
         'user_id',
+        'content',
         'reference'
     ];
 
@@ -22,6 +23,7 @@ class Lesson extends Model
             'class_id' => ['integer','required','exists:classes,id'],
             'pack_module_subject_id' => ['integer','required','exists:pack_module_subjects,id'],
             'user_id' => ['integer','required','exists:users,id'],
+            'content' => ['string','max:512','required'],
             'reference' => ['date']
         ];
     }
