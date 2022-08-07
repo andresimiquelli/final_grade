@@ -23,6 +23,10 @@ class EnrollmentController extends Controller
     {
         $service = new EnrollmentGetService();
 
+        if($request->has('filters') && $request->has('paginate'))
+            if($request->get('paginate') == 'disable')
+                $service->setPaginate(false);
+
         if($request->has("with"))
             $service->setRelationships(explode(",",$request->get("with")));
         else

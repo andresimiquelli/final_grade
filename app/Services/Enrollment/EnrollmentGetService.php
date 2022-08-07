@@ -8,6 +8,7 @@ use App\Services\GetService;
 class EnrollmentGetService extends GetService
 {
     protected $model = Enrollment::class;
+    protected $switchPagination = true;
     protected $searchable = [
         'student_id',
         'class_id',

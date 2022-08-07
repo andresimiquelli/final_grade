@@ -13,15 +13,25 @@ abstract class GetService
     protected $searchable = [];
     protected $with_fields = [];
     protected $builder;
+    protected $switchPagination = false;
 
     private $nesteds = [];
     private $relationships = [];
+    private $paginate = true;
 
     public function __construct(array $nesteds = [])
     {
         $this->model = new $this->model();
         $this->builder = $this->model->query();
         $this->nesteds = $nesteds;
+    }
+
+    public function setPaginate(bool $value): bool
+    {
+        if($this->switchPagination) 
+            $this->paginate = $value;
+        
+        return $this->switchPagination;
     }
 
     public function setRelationships(array $relationships)
@@ -34,7 +44,7 @@ abstract class GetService
         $this->resolveRelationships();
         $this->resolveNesteds();
 
-        return $this->builder->paginate();
+        return $this->getResults();
     }
 
     public function search($filters = "")
@@ -43,7 +53,8 @@ abstract class GetService
         $this->resolveNesteds();
         $filtering = new FilteringUtil($this->builder, $this->searchable);
         $this->builder = $filtering->resolveQuery($filters);
-        return $this->builder->paginate();
+
+        return $this->getResults();
     }
 
     public function find($id)
@@ -82,5 +93,13 @@ abstract class GetService
                     throw new RelationshipException($field);
             }
         }
+    }
+
+    private function getResults() 
+    {
+        if($this->paginate)
+            return $this->builder->paginate();
+
+        return $this->builder->get();
     }
 }
