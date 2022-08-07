@@ -7,6 +7,7 @@ use App\Exceptions\ResourceNotFoundException;
 abstract class DeleteService
 {
     protected $model;
+    protected $builder;
     protected $nesteds = [];
     protected $triggerBeforeDelete = [];
     protected $triggerAfterDelete = [];
@@ -15,30 +16,58 @@ abstract class DeleteService
     public function __construct(array $nesteds = [])
     {
         $this->model = new $this->model();
+        $this->builder = $this->model->query();
         $this->nesteds = $nesteds;
     }
 
     public function delete($id)
     {
         $this->resolveNesteds();
-        $exists = $this->model->find($id);
+        $exists = $this->builder->find($id);
 
         if(!$exists)
             throw new ResourceNotFoundException(get_class($this->model->make()));
 
-        return $this->executeDeletion($exists);
+        $result = $this->executeDeletion($exists);
+
+        $this->clearQuery();
+
+        return $result;
     }
 
     public function deleteBy($field, $value) 
     {
         $deleted = array();
-        $result = $this->model->where($field, $value)->get();
+        $result = $this->builder->where($field, $value)->get();
         
         foreach($result as $row)
         {
             $deleted = $this->executeDeletion($row);
         }
 
+        $this->clearQuery();
+
+        return $deleted;
+    }
+
+    public function deleteByFields(array $values) 
+    {
+        $deleted = array();
+
+        foreach($values as $field => $value) 
+        {
+            $this->builder = $this->builder->where($field, $value);
+        }
+
+        $result = $this->builder->get();
+        
+        foreach($result as $row)
+        {
+            $deleted[] = $this->executeDeletion($row);
+        }
+
+        $this->clearQuery();
+        
         return $deleted;
     }
 
@@ -46,7 +75,7 @@ abstract class DeleteService
     {
         foreach($this->nesteds as $field => $value)
         {
-            $this->model = $this->model->where($field, $value); 
+            $this->builder = $this->builder->where($field, $value); 
         }
         
     }
@@ -66,5 +95,10 @@ abstract class DeleteService
         $entity->delete();
         $entity = $this->trigger($this->triggerAfterDelete, $entity);
         return $entity;
+    }
+
+    private function clearQuery()
+    {
+        $this->builder = $this->model->newQuery();
     }
 }

@@ -65,4 +65,6 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     Route::apiResource('finalgrades', FinalgradeController::class, ['except' => [...$resourceExcept, 'update']]);
 
     Route::get('journals/{class_id}', JournalsController::class."@index");
+
+    Route::post('lessons/{lesson_id}/absences', LessonController::class."@updateAbsences");
 });

@@ -12,4 +12,9 @@ class LessonGetService extends GetService
         'reference',
         'class_id'
     ];
+
+    protected $with_fields = [
+        'absences',
+        'teacher'
+    ];
 }
