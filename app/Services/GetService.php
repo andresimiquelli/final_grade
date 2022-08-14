@@ -69,6 +69,18 @@ abstract class GetService
         return $record;
     }
 
+    public function findBy($field, $value) {
+        $this->resolveRelationships();
+        $this->resolveNesteds();
+        $this->builder = $this->builder->where($field, $value);
+
+        $record = $this->builder->first();
+        if(!$record)
+            throw new ResourceNotFoundException(get_class($this->model));
+
+        return $record;
+    }
+
     private function resolveNesteds()
     {
         foreach($this->nesteds as $field => $value)

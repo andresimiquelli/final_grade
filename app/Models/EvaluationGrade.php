@@ -18,8 +18,8 @@ class EvaluationGrade extends Model
     public function getValidationRules()
     {
         return [
-            'evaluation_id' => ['integer','required','exists:teachers,id'],
-            'enrollment_id' => ['integer','required','exists:classes,id'],
+            'evaluation_id' => ['integer','required'],
+            'enrollment_id' => ['integer','required'],
             'value' => ['integer','max:255','min:0']
         ];
     }

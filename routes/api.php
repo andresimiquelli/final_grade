@@ -67,4 +67,5 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     Route::get('journals/{class_id}', JournalsController::class."@index");
 
     Route::post('lessons/{lesson_id}/absences', LessonController::class."@updateAbsences");
+    Route::post('evaluations/{evaluation_id}/grades', EvaluationGradeController::class."@saveAll");
 });
