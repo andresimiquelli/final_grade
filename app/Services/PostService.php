@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\DataValidationException;
 use App\Utils\DataValidator;
+use Exception;
 
 abstract class PostService
 {
@@ -55,10 +56,7 @@ abstract class PostService
 
             $result = $this->model->create($data);
 
-            foreach($this->relationships as $rel)
-            {
-                $result->$rel;
-            }
+            $result = $this->resolveRelationships($result);
 
             $result = $this->trigger($this->triggerAfterStore, $result);
 
@@ -107,5 +105,34 @@ abstract class PostService
         }
 
         return $obj;
+    }
+
+    private function resolveRelationships($object)
+    {
+        foreach($this->relationships as $rel)
+        {
+            $rels = explode(".",$rel);
+            switch(count($rels))
+            {
+                case 0: break;
+                case 1:
+                    $func1 = $rels[0];
+                    $object->$func1;
+                    break;
+                case 2: 
+                    $func1 = $rels[0];
+                    $func2 = $rels[1];
+                    $object->$func1->$func2; 
+                    break;
+                case 3: 
+                    $func1 = $rels[0];
+                    $func2 = $rels[1];
+                    $func3 = $rels[2];
+                    $object->$func1->$func2->$func3; 
+                    break;
+            }
+        }
+
+        return $object;
     }
 }

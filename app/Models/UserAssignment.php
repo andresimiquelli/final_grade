@@ -12,7 +12,7 @@ class UserAssignment extends Model
     protected $fillable = [
         'user_id',
         'class_id',
-        'subject_id',
+        'pack_module_subject_id',
         'start_at',
         'end_at'
     ];
@@ -22,7 +22,7 @@ class UserAssignment extends Model
         return [
             'user_id' => ['integer','required','exists:users,id'],
             'class_id' => ['integer','required','exists:classes,id'],
-            'subject_id' => ['integer','required','exists:subjects,id'],
+            'pack_module_subject_id' => ['integer','required'],
             'start_at' => ['date'],
             'end_at' => ['date']
         ];
@@ -40,6 +40,6 @@ class UserAssignment extends Model
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class,'subject_id','id');
+        return $this->belongsTo(PackModuleSubject::class,'pack_module_subject_id','id');
     }
 }

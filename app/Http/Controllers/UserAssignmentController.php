@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class UserAssignmentController extends Controller
 {
 
-    private $defaultRelationships = ['cclass','subject'];
+    private $defaultRelationships = ['cclass','subject.subject'];
 
     /**
      * Display a listing of the resource.
