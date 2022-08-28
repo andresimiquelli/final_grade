@@ -8,6 +8,7 @@ use App\Services\Finalgrade\FinalgradeDeleteService;
 use App\Services\Finalgrade\FinalgradeGetService;
 use App\Services\Finalgrade\FinalgradePostService;
 use App\Services\Finalgrade\FinalgradePutService;
+use App\Services\Finalgrade\FinalGradeReportService;
 use Illuminate\Http\Request;
 
 class FinalgradeController extends Controller
@@ -86,6 +87,19 @@ class FinalgradeController extends Controller
         $result = $service->delete($id);
         
         return response()->json($result);
+    }
+
+    /**
+     * Get shutdown report
+     *
+     * @param int $class_id
+     * @param int $subject_id
+     * @return \Illuminate\Http\Response
+     */
+    public function report($class_id, $subject_id) {
+        $service = new FinalGradeReportService();
+        $result = $service->report($class_id,$subject_id);
+        return response($result);
     }
 
     private function getNeeded($request)
