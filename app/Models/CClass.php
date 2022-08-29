@@ -54,4 +54,9 @@ class CClass extends Model
     {
         return $this->hasMany(TeacherAssignment::class,'class_id','id');
     }
+
+    public function journals()
+    {
+        return $this->hasMany(Journal::class,'class_id','id');
+    }
 }

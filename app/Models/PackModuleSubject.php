@@ -47,4 +47,9 @@ class PackModuleSubject extends Model
     {
         return $this->hasMany(Lesson::class,'pack_module_subject_id','id');
     }
+
+    public function journals()
+    {
+        return $this->hasMany(Journal::class,'pack_module_subject_id','id');
+    }
 }
