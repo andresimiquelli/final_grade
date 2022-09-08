@@ -11,7 +11,7 @@ class Finalgrade extends Model
 
     protected $fillable = [
         'enrollment_id',
-        'subject_id',
+        'pack_module_subject_id',
         'value',
         'absences'
     ];
@@ -19,8 +19,8 @@ class Finalgrade extends Model
     public function getValidationRules()
     {
         return [
-            'enrollment_id' => ['integer','required','exists:classes,id'],
-            'subject_id' => ['integer','required','exists:subjects,id'],
+            'enrollment_id' => ['integer','required'],
+            'pack_module_subject_id' => ['integer','required'],
             'value' => ['integer','max:255','min:0'],
             'absences' => ['integer','max:65535','min:0']
         ];
@@ -33,6 +33,6 @@ class Finalgrade extends Model
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class,'subject_id','id');
+        return $this->belongsTo(PackModuleSubject::class,'pack_module_subject_id','id');
     }
 }

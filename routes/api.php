@@ -34,9 +34,9 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
         Route::middleware(['auth:api','jwt.auth'])->group(function () {
            Route::post('logout', 'App\Http\Controllers\AuthController@logout');
             Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
-            Route::post('me', 'App\Http\Controllers\AuthController@me'); 
+            Route::post('me', 'App\Http\Controllers\AuthController@me');
         });
-        
+
         Route::post('login', 'App\Http\Controllers\AuthController@login');
     });
 
@@ -57,13 +57,14 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
 
     Route::apiResource('enrollments',EnrollmentController::class, ['except' => $resourceExcept]);
     Route::apiResource('enrollments.absences', EnrollmentAbsenceController::class, ['except' => [...$resourceExcept, 'update']]);
-    
+
     Route::apiResource('classes.subjects.lessons',LessonController::class, ['except' => $resourceExcept]);
     Route::apiResource('classes.subjects.evaluations',EvaluationController::class, ['except' => $resourceExcept]);
     Route::apiResource('classes.subjects.evaluations.grades',EvaluationGradeController::class, ['except' => [...$resourceExcept, 'update']]);
 
     Route::apiResource('finalgrades', FinalgradeController::class, ['except' => [...$resourceExcept, 'update']]);
     Route::get('finalgrades/classes/{class_id}/subjects/{subject_id}/report', FinalgradeController::class.'@report');
+    Route::post('finalgrades/classes/{class_id}/subjects/{subject_id}', FinalgradeController::class.'@storeAll');
 
     Route::get('journals/{class_id}', JournalsController::class."@index");
     Route::get('journals/{class_id}/{subject_id}', JournalsController::class."@find");

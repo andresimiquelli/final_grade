@@ -6,9 +6,11 @@ use App\Exceptions\DataValidationException;
 use App\Exceptions\Error;
 use App\Services\Finalgrade\FinalgradeDeleteService;
 use App\Services\Finalgrade\FinalgradeGetService;
+use App\Services\Finalgrade\FinalgradePostManyService;
 use App\Services\Finalgrade\FinalgradePostService;
 use App\Services\Finalgrade\FinalgradePutService;
 use App\Services\Finalgrade\FinalGradeReportService;
+use App\Services\Journal\JournalPostService;
 use Illuminate\Http\Request;
 
 class FinalgradeController extends Controller
@@ -21,14 +23,14 @@ class FinalgradeController extends Controller
      */
     public function index(Request $request)
     {
-        $needed = $this->getNeeded($request);    
+        $needed = $this->getNeeded($request);
         $service = new FinalgradeGetService($needed);
 
         if($request->has('filters'))
             $result = $service->search($request->get('filters'));
         else
             $result = $service->findAll();
-        
+
        return response()->json($result);
     }
 
@@ -85,7 +87,7 @@ class FinalgradeController extends Controller
     {
         $service = new FinalgradeDeleteService();
         $result = $service->delete($id);
-        
+
         return response()->json($result);
     }
 
@@ -96,10 +98,41 @@ class FinalgradeController extends Controller
      * @param int $subject_id
      * @return \Illuminate\Http\Response
      */
-    public function report($class_id, $subject_id) {
+    public function report($class_id, $subject_id)
+    {
         $service = new FinalGradeReportService();
         $result = $service->report($class_id,$subject_id);
         return response($result);
+    }
+
+    /**
+     * Post shutdown report
+     *
+     * @param int $class_id
+     * @param int $subject_id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeAll(Request $request, $class_id, $subject_id)
+    {
+        $result = [];
+        $service = new FinalgradePostManyService();
+
+        if($request->has('grades'))
+        {
+            $grades = $request->json()->get('grades');
+            if(is_array($grades))
+            {
+                $result = $service->saveAll($grades);
+                $journalService = new JournalPostService();
+                $journalService->createOrUpdate([
+                    'class_id' => $class_id,
+                    'pack_module_subject_id' => $subject_id,
+                    'status' => 1
+                ]);
+            }
+        }
+
+        return response()->json($result, 201);
     }
 
     private function getNeeded($request)
@@ -112,7 +145,7 @@ class FinalgradeController extends Controller
         if($request->has('subject_id'))
             $needed['subject_id'] = $request->get('subject_id');
 
-        if(count($needed) == 0) 
+        if(count($needed) == 0)
             throw new DataValidationException(['needed' => 'enrollment_id or subject_id are needed.']);
 
         return $needed;

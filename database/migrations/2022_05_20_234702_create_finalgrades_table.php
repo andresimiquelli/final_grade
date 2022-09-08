@@ -16,12 +16,12 @@ class CreateFinalgradesTable extends Migration
         Schema::create('finalgrades', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('enrollment_id');
-            $table->unsignedBigInteger('subject_id');
+            $table->unsignedBigInteger('pack_module_subject_id');
             $table->unsignedTinyInteger('value')->default(0);
             $table->unsignedSmallInteger('absences')->default(0);
             $table->timestamps();
 
-            $table->foreign('subject_id')->references('id')->on('subjects');
+            $table->foreign('pack_module_subject_id')->references('id')->on('pack_module_subjects');
             $table->foreign('enrollment_id')->references('id')->on('enrollments');
         });
     }
@@ -34,7 +34,7 @@ class CreateFinalgradesTable extends Migration
     public function down()
     {
         Schema::table('finalgrades', function(Blueprint $table) {
-            $table->dropIndex('finalgrades_subject_id_foreign');
+            $table->dropIndex('finalgrades_pack_module_subject_id_foreign');
             $table->dropIndex('finalgrades_enrollment_id_foreign');
         });
 

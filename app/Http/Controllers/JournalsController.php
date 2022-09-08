@@ -6,11 +6,10 @@ use App\Services\CClass\CClassGetService;
 use App\Services\Journal\JournalGetService;
 use App\Services\Journal\JournalPostService;
 use Illuminate\Http\Request;
-use PhpParser\Node\Scalar\MagicConst\Class_;
 
 class JournalsController extends Controller
 {
-    public function index(Request $request, $class_id) 
+    public function index(Request $request, $class_id)
     {
         $classService = new CClassGetService();
         $class = $classService->find($class_id);
