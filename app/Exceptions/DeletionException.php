@@ -17,6 +17,6 @@ class DeletionException extends Exception
     public function render()
     {
         $error = new Error(Error::$DATABASE_ERROR, "Deletion forbidden.", $this->errors);
-        return response()->json($error->toArray(),403);
+        return response()->json($error->toArray(),418);
     }
 }
