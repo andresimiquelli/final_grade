@@ -14,6 +14,7 @@ abstract class GetService
     protected $with_fields = [];
     protected $builder;
     protected $switchPagination = false;
+    protected $orderBy = [];
 
     private $nesteds = [];
     private $relationships = [];
@@ -28,9 +29,9 @@ abstract class GetService
 
     public function setPaginate(bool $value): bool
     {
-        if($this->switchPagination) 
+        if($this->switchPagination)
             $this->paginate = $value;
-        
+
         return $this->switchPagination;
     }
 
@@ -39,10 +40,16 @@ abstract class GetService
         $this->relationships = $relationships;
     }
 
+    public function setOrderBy(array $orderBy)
+    {
+        $this->orderBy = $orderBy;
+    }
+
     public function findAll()
     {
         $this->resolveRelationships();
         $this->resolveNesteds();
+        $this->resolveOrderBy();
 
         return $this->getResults();
     }
@@ -53,6 +60,7 @@ abstract class GetService
         $this->resolveNesteds();
         $filtering = new FilteringUtil($this->builder, $this->searchable);
         $this->builder = $filtering->resolveQuery($filters);
+        $this->resolveOrderBy();
 
         return $this->getResults();
     }
@@ -85,7 +93,7 @@ abstract class GetService
     {
         foreach($this->nesteds as $field => $value)
         {
-            $this->builder = $this->builder->where($field, $value); 
+            $this->builder = $this->builder->where($field, $value);
         }
     }
 
@@ -94,10 +102,10 @@ abstract class GetService
         $forsearch[0] = "";
         $forsearch = array_merge($forsearch, $this->with_fields);
 
-        foreach($this->relationships as $field) 
+        foreach($this->relationships as $field)
         {
             $ffield = trim(strtolower($field));
-            if(strlen($ffield) > 0) 
+            if(strlen($ffield) > 0)
             {
                 if(array_search($ffield, $forsearch, true) > 0)
                     $this->builder = $this->builder->with(trim($field));
@@ -107,7 +115,20 @@ abstract class GetService
         }
     }
 
-    private function getResults() 
+    private function resolveOrderBy()
+    {
+        foreach($this->orderBy as $order) {
+            if(is_array($order)) {
+                if(count($order) > 1) {
+                    $this->builder = $this->builder->orderBy($order[0], $order[1]);
+                }
+            } else {
+                $this->builder = $this->builder->orderBy($order);
+            }
+        }
+    }
+
+    private function getResults()
     {
         if($this->paginate)
             return $this->builder->paginate();

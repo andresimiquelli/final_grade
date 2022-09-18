@@ -17,4 +17,6 @@ class LessonGetService extends GetService
         'absences',
         'teacher'
     ];
+
+    protected $orderBy = [['reference', 'desc']];
 }
