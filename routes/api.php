@@ -20,6 +20,7 @@ use App\Http\Controllers\StudetController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserAssignmentController;
 use App\Http\Controllers\UserController;
+use App\Models\PackModule;
 
 $resourceExcept = ['create','edit'];
 
@@ -72,4 +73,7 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
 
     Route::post('lessons/{lesson_id}/absences', LessonController::class."@updateAbsences");
     Route::post('evaluations/{evaluation_id}/grades', EvaluationGradeController::class."@saveAll");
+
+    Route::post('reorder/modules', PackModuleController::class.'@reorder');
+    Route::post('reorder/subjects', PackModuleSubjectController::class.'@reorder');
 });

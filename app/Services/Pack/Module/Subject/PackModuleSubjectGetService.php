@@ -9,4 +9,5 @@ class PackModuleSubjectGetService extends GetService
 {
     protected $model = PackModuleSubject::class;
     protected $with_fields = ['subject','module','module.pack'];
+    protected $orderBy = [['order']];
 }

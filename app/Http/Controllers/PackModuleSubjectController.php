@@ -6,6 +6,7 @@ use App\Services\Pack\Module\Subject\PackModuleSubjectDeleteService;
 use App\Services\Pack\Module\Subject\PackModuleSubjectGetService;
 use App\Services\Pack\Module\Subject\PackModuleSubjectPostService;
 use App\Services\Pack\Module\Subject\PackModuleSubjectPutService;
+use App\Services\Pack\Module\Subject\PackModuleSubjectReorderService;
 use Illuminate\Http\Request;
 
 class PackModuleSubjectController extends Controller
@@ -31,7 +32,7 @@ class PackModuleSubjectController extends Controller
             $result = $service->search($request->get('filters'));
         else
             $result = $service->findAll();
-        
+
        return response()->json($result);
     }
 
@@ -92,7 +93,13 @@ class PackModuleSubjectController extends Controller
 
         $service = new PackModuleSubjectDeleteService(['pack_module_id' => $module_id]);
         $result = $service->delete($id);
-        
+
         return response()->json($result);
+    }
+
+    public function reorder(Request $request)
+    {
+        $service = new PackModuleSubjectReorderService();
+        $service->reorder($request->json()->get('ids'));
     }
 }
