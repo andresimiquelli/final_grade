@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\User\UserChangePasswordService;
 use App\Services\User\UserDeleteService;
 use App\Services\User\UserGetService;
 use App\Services\User\UserPostService;
@@ -23,7 +24,7 @@ class UserController extends Controller
             $result = $service->search($request->get('filters'));
         else
             $result = $service->findAll();
-        
+
        return response()->json($result);
     }
 
@@ -80,7 +81,21 @@ class UserController extends Controller
     {
         $service = new UserDeleteService();
         $result = $service->delete($id);
-        
+
+        return response()->json($result);
+    }
+
+    /**
+     * Change password
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function changePassword(Request $request, $id)
+    {
+        $service = new UserChangePasswordService();
+        $result = $service->change($id, $request->json()->all());
+
         return response()->json($result);
     }
 }

@@ -42,6 +42,7 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
     });
 
     Route::apiResource('users',UserController::class,['except' => $resourceExcept]);
+    Route::patch('users/{id}/change_password',UserController::class."@changePassword");
     Route::apiResource('users.assignments',UserAssignmentController::class, ['except' => $resourceExcept]);
 
     Route::apiResource('courses',CourseController::class,['except' => $resourceExcept]);
