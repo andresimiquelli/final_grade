@@ -7,6 +7,7 @@ use App\Services\User\UserDeleteService;
 use App\Services\User\UserGetService;
 use App\Services\User\UserPostService;
 use App\Services\User\UserPutService;
+use App\Services\User\UserResetPasswordService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -97,5 +98,17 @@ class UserController extends Controller
         $result = $service->change($id, $request->json()->all());
 
         return response()->json($result);
+    }
+
+    /**
+     * Change password
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPassword($id)
+    {
+        $service = new UserResetPasswordService();
+        $service->reset($id);
     }
 }
