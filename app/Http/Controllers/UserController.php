@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DataValidationException;
 use App\Services\User\UserChangePasswordService;
 use App\Services\User\UserDeleteService;
 use App\Services\User\UserGetService;
@@ -106,9 +107,17 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function resetPassword($id)
+    public function resetPassword(Request $request)
     {
-        $service = new UserResetPasswordService();
-        $service->reset($id);
+        if($request->json()->has('email')) {
+            $email = $request->json()->get('email');
+            $service = new UserResetPasswordService();
+
+            if($service->reset($email)) {
+                return response()->json(["success"]);
+            }
+        }
+
+        throw new DataValidationException(['email' => 'Email is required']);
     }
 }

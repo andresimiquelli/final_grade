@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Mail;
 
 class UserResetPasswordService
 {
-    public function reset($id)
+    public function reset($email)
     {
-        $user = User::find($id);
+        $user = User::where('email', $email)->first();
         if(!$user)
             throw new ResourceNotFoundException(User::class);
 
@@ -21,5 +21,6 @@ class UserResetPasswordService
         $mail = new ResetPasswordMail($user, $password);
         $mail->subject("Redefinição de senha");
         Mail::to($user->email)->send($mail);
+        return true;
     }
 }

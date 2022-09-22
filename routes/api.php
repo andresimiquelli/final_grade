@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () use ($resourceExcept) {
 
+    Route::post('resetpassword',UserController::class."@resetPassword");
+
     Route::prefix('auth')->group(function() {
 
         Route::middleware(['auth:api','jwt.auth'])->group(function () {
@@ -41,41 +43,44 @@ Route::prefix('v1')->group(function () use ($resourceExcept) {
         Route::post('login', 'App\Http\Controllers\AuthController@login');
     });
 
-    Route::apiResource('users',UserController::class,['except' => $resourceExcept]);
-    Route::patch('users/{id}/change_password',UserController::class."@changePassword");
-    Route::apiResource('users.assignments',UserAssignmentController::class, ['except' => $resourceExcept]);
-    Route::get('resetpassword/{id}',UserController::class."@resetPassword");
+    Route::middleware(['jwt.auth'])->group(function () use ($resourceExcept) {
 
-    Route::apiResource('courses',CourseController::class,['except' => $resourceExcept]);
+        Route::apiResource('users',UserController::class,['except' => $resourceExcept]);
+        Route::patch('users/{id}/change_password',UserController::class."@changePassword");
+        Route::apiResource('users.assignments',UserAssignmentController::class, ['except' => $resourceExcept]);
 
-    Route::apiResource('subjects',SubjectController::class,['except' => $resourceExcept]);
+        Route::apiResource('courses',CourseController::class,['except' => $resourceExcept]);
 
-    Route::apiResource('packs',PackController::class,['except' => $resourceExcept]);
-    Route::apiResource('packs.modules',PackModuleController::class,['except' => $resourceExcept]);
-    Route::apiResource('packs.modules.subjects',PackModuleSubjectController::class,['except' => $resourceExcept]);
+        Route::apiResource('subjects',SubjectController::class,['except' => $resourceExcept]);
 
-    Route::apiResource('students',StudetController::class, ['except' => $resourceExcept]);
+        Route::apiResource('packs',PackController::class,['except' => $resourceExcept]);
+        Route::apiResource('packs.modules',PackModuleController::class,['except' => $resourceExcept]);
+        Route::apiResource('packs.modules.subjects',PackModuleSubjectController::class,['except' => $resourceExcept]);
 
-    Route::apiResource('classes',CClassController::class, ['except' => $resourceExcept]);
+        Route::apiResource('students',StudetController::class, ['except' => $resourceExcept]);
 
-    Route::apiResource('enrollments',EnrollmentController::class, ['except' => $resourceExcept]);
-    Route::apiResource('enrollments.absences', EnrollmentAbsenceController::class, ['except' => [...$resourceExcept, 'update']]);
+        Route::apiResource('classes',CClassController::class, ['except' => $resourceExcept]);
 
-    Route::apiResource('classes.subjects.lessons',LessonController::class, ['except' => $resourceExcept]);
-    Route::apiResource('classes.subjects.evaluations',EvaluationController::class, ['except' => $resourceExcept]);
-    Route::apiResource('classes.subjects.evaluations.grades',EvaluationGradeController::class, ['except' => [...$resourceExcept, 'update']]);
+        Route::apiResource('enrollments',EnrollmentController::class, ['except' => $resourceExcept]);
+        Route::apiResource('enrollments.absences', EnrollmentAbsenceController::class, ['except' => [...$resourceExcept, 'update']]);
 
-    Route::apiResource('finalgrades', FinalgradeController::class, ['except' => [...$resourceExcept, 'update']]);
-    Route::get('finalgrades/classes/{class_id}/subjects/{subject_id}/report', FinalgradeController::class.'@report');
-    Route::post('finalgrades/classes/{class_id}/subjects/{subject_id}', FinalgradeController::class.'@storeAll');
+        Route::apiResource('classes.subjects.lessons',LessonController::class, ['except' => $resourceExcept]);
+        Route::apiResource('classes.subjects.evaluations',EvaluationController::class, ['except' => $resourceExcept]);
+        Route::apiResource('classes.subjects.evaluations.grades',EvaluationGradeController::class, ['except' => [...$resourceExcept, 'update']]);
 
-    Route::get('journals/{class_id}', JournalsController::class."@index");
-    Route::get('journals/{class_id}/{subject_id}', JournalsController::class."@find");
-    Route::post('journals', JournalsController::class."@store");
+        Route::apiResource('finalgrades', FinalgradeController::class, ['except' => [...$resourceExcept, 'update']]);
+        Route::get('finalgrades/classes/{class_id}/subjects/{subject_id}/report', FinalgradeController::class.'@report');
+        Route::post('finalgrades/classes/{class_id}/subjects/{subject_id}', FinalgradeController::class.'@storeAll');
 
-    Route::post('lessons/{lesson_id}/absences', LessonController::class."@updateAbsences");
-    Route::post('evaluations/{evaluation_id}/grades', EvaluationGradeController::class."@saveAll");
+        Route::get('journals/{class_id}', JournalsController::class."@index");
+        Route::get('journals/{class_id}/{subject_id}', JournalsController::class."@find");
+        Route::post('journals', JournalsController::class."@store");
 
-    Route::post('reorder/modules', PackModuleController::class.'@reorder');
-    Route::post('reorder/subjects', PackModuleSubjectController::class.'@reorder');
+        Route::post('lessons/{lesson_id}/absences', LessonController::class."@updateAbsences");
+        Route::post('evaluations/{evaluation_id}/grades', EvaluationGradeController::class."@saveAll");
+
+        Route::post('reorder/modules', PackModuleController::class.'@reorder');
+        Route::post('reorder/subjects', PackModuleSubjectController::class.'@reorder');
+    });
+
 });
