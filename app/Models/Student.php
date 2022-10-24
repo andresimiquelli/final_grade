@@ -19,8 +19,8 @@ class Student extends Model
     {
         return [
             'name' => ['string','max:191','required'],
-            'email' => ['email','max:191'],
-            'phone' => ['string','max:15']
+            'email' => ['email','max:191','nullable'],
+            'phone' => ['string','max:15','nullable']
         ];
     }
 
