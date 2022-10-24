@@ -10,7 +10,6 @@ class PackModuleSubject extends Model
     use HasFactory;
 
     protected $fillable = [
-        'pack_id',
         'pack_module_id',
         'subject_id',
         'load',
@@ -20,7 +19,6 @@ class PackModuleSubject extends Model
     public function getValidationRules()
     {
         return [
-            'pack_id' => ['integer','required','exists:packs,id'],
             'pack_module_id' => ['integer','required','exists:pack_modules,id'],
             'subject_id' => ['integer','required','exists:subjects,id'],
             'load' => ['integer','max:65535', 'min:0'],
